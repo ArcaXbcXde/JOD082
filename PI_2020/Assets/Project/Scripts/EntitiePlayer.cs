@@ -26,6 +26,7 @@ public class MovementController : EntitiesComplex
 
     bool isGround = true;
 
+    // "Start"
     protected override void Awake()
     {
         base.Awake();
@@ -33,8 +34,10 @@ public class MovementController : EntitiesComplex
         m_animator = gameObject.GetComponent<Animator>();
     }
 
+    // Update
     private void Update()
     {
+
         Move();
         Jump(KeyCode.Space);
         m_animator.SetBool("IsGround", isGround);
@@ -42,22 +45,28 @@ public class MovementController : EntitiesComplex
     }
 
     #region Movement
-    void Move()
-    {
+    // Method for basic movement
+    private void Move() {
+        // Movement variables
         float moveAxisX = Input.GetAxis("Horizontal");
         float moveAxisZ = Input.GetAxis("Vertical");
 
+        // Updating the movement variables
         m_animator.SetFloat("moveAxisX", moveAxisX);
         m_animator.SetFloat("moveAxisZ", moveAxisZ);
 
+        // Sets the rotation of the player
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MoveVector(moveAxisZ,moveAxisX)), m_rotationSpeed);
+        // Sets the speed of the player based on the X and Z movement variables
         m_rigidbody.velocity = (MoveVector(moveAxisZ, moveAxisX) * m_speed);
 
     }
-    void Jump(KeyCode _jumpButton)
-    {
-        if (Input.GetKeyDown(_jumpButton))
-        {
+
+    // Method to jump
+    private void Jump(KeyCode _jumpButton) {
+
+        // If the jump button is pressed, the rigidbody applies a force upwards
+        if (Input.GetKeyDown(_jumpButton)) {
             m_rigidbody.velocity = Vector3.up * m_jumpForce;
         }
     }
@@ -66,9 +75,10 @@ public class MovementController : EntitiesComplex
 
     #region Vectors
 
-    //get the foward position of the camera
-    Vector3 CameraFowardVector()
-    {
+    //get the forward position of the camera
+    private Vector3 CameraFowardVector() {
+
+
         Vector3 camForward = m_camera.forward;
         camForward.y = 0f;
         camForward.Normalize();
@@ -76,8 +86,9 @@ public class MovementController : EntitiesComplex
         return camForward;
     }
 
-    Vector3 CameraRigthVector()
-    {
+    // Get the side position of the camera 
+    private Vector3 CameraRightVector() {
+
         Vector3 camRight = m_camera.right;
         camRight.y = 0f;
         camRight.Normalize();
@@ -87,22 +98,23 @@ public class MovementController : EntitiesComplex
 
     }
 
-    Vector3 CameraPositionVector()
-    {
+    // 
+    private Vector3 CameraPositionVector() {
+
         Vector3 camPosition = transform.localPosition - m_camera.position;
         camPosition.y = 0f;
         return camPosition;
     }
 
-    Vector3 MoveVector(float _axisZ, float _axisX)
-    {
-        Vector3 moveVector = (CameraFowardVector() * _axisZ) + (CameraRigthVector() * _axisX) + VerticalVector();
+    Vector3 MoveVector(float _axisZ, float _axisX) {
+
+        Vector3 moveVector = (CameraFowardVector() * _axisZ) + (CameraRightVector() * _axisX) + VerticalVector();
 
         return moveVector;
     }
 
-    Vector3 VerticalVector()
-    {
+    Vector3 VerticalVector() {
+
         return new Vector3(0,m_Verticalvelocity , 0); 
     }
 
@@ -110,19 +122,23 @@ public class MovementController : EntitiesComplex
 
     #region Ground Check
 
-    private void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.tag.Equals("Ground"))
-        {
+    // Checks whatever entered the player's trigger
+    private void OnTriggerEnter(Collider col) {
+
+        // Checks if what entered in the trigger was the ground, so marks the player as on ground
+        if (col.gameObject.tag.Equals("Ground")) {
+
             Debug.Log("Hit Ground");
             isGround = true;
         }
     }
 
-    private void OnTriggerExit(Collider col)
-    {
-        if (col.gameObject.tag.Equals("Ground"))
-        {
+    // Checks whatever exited the player's trigger
+    private void OnTriggerExit(Collider col) {
+
+        // Checks if what exited the trigger was the ground, so marks the player as out of ground
+        if (col.gameObject.tag.Equals("Ground")) {
+
             Debug.Log("Nope");
             isGround = false;
         }
@@ -130,14 +146,14 @@ public class MovementController : EntitiesComplex
     #endregion
 
     #region Gizmos
-    private void OnDrawGizmos()
-    {
+    // Gizmos to mark stuffs in editor
+    private void OnDrawGizmos() {
 
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, CameraFowardVector());
 
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, CameraRigthVector());
+        Gizmos.DrawRay(transform.position, CameraRightVector());
     }
     #endregion
 }
