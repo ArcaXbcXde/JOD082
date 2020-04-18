@@ -5,6 +5,7 @@ using UnityEngine;
 public class TestGuard : MonoBehaviour {
 
     /* float vel             : Velocidade do guarda
+     * float velPersegue     : Velocidade de perseguição do guarda
      * float tempoEspera     : Tempo de espera que o guarda fica em cada ponto
      * float velRotacao      : Velocidade de rotação do guarda
      * float distVisao       : Distância que o guarda enxerga o alvo
@@ -12,6 +13,8 @@ public class TestGuard : MonoBehaviour {
      * float distDano        : Distância para que a capsula cause dano
      * float tempoPerceber   : Tempo até o guarda perceber a presença do jogador
      * float tempoDesistencia: Tempo até o guarda desistir de perseguir o jogador
+     * float cdAtaque        : Tempo que leva até o guarda poder atacar novamente
+     * float danoGuarda      : Dano que o guarda causa no ataque
      * 
      * bool loopCaminho      : O caminho aparece como um loop no editor?
      * 
@@ -23,7 +26,7 @@ public class TestGuard : MonoBehaviour {
      * 
      * float anguloVisao     : Ângulo de visão do guarda
      * float tempoVisto      : Tempo que o guarda conseguiu ver o jogador
-     * float cdAtaque        : Cooldown do ataque do guarda
+     * float recargaAtaque   : Tempo de recarga do ataque do guarda
      * 
      * bool atencao          : O guarda está atento e procurando um alvo?
      * bool alerta           : O guarda está alerta e perseguindo o alvo?
@@ -38,6 +41,7 @@ public class TestGuard : MonoBehaviour {
     public static event System.Action guardaViuJogador;
 
     public float vel = 1.0f;
+    public float velPersegue = 2.0f;
     public float tempoEspera = 0.2f;
     public float velRotacao = 90.0f;
     public float distVisao = 15.0f;
@@ -45,6 +49,8 @@ public class TestGuard : MonoBehaviour {
     public float distDano = 2.0f;
     public float tempoPerceber = 1.0f;
     public float tempoDesistencia = 5.0f;
+    public float cdAtaque = 2.0f;
+    public float danoGuarda = 20.0f;
     public bool loopCaminho = true;
     public Transform meuCaminho;
     public Light luz;
@@ -52,7 +58,7 @@ public class TestGuard : MonoBehaviour {
     
     private float anguloVisao;
     private float tempoVisto = 0.0f;
-    private float cdAtaque = 2.0f;
+    private float recargaAtaque = 0.0f;
     private bool atencao = false;
     private bool alerta = false;
     private bool perigo = false;
@@ -89,6 +95,20 @@ public class TestGuard : MonoBehaviour {
     private void Update() {
 
         // Se o guarda vê o alvo, a luz muda de cor e o guarda entra em um estado de atenção ou alerta, caso contrário volta ao normal
+        ControleTempoVisto();
+        
+        // Controle do quão atento o guarda está ao buscar o alvo
+        ControleAtencao();
+
+        // Se o ataque do guarda está em recarga, faz a contagem
+        if (recargaAtaque > 0) {
+
+            recargaAtaque -= Time.deltaTime;
+        }
+    }
+
+    private void ControleTempoVisto() {
+
         if (alerta == false) {
             if (VerJogador() == true) {
                 // Com o alvo muito próximo, o guarda percebe imediatamente
@@ -107,18 +127,16 @@ public class TestGuard : MonoBehaviour {
             if (VerJogador() == true) {
 
                 tempoVisto = tempoDesistencia;
-            }else {
+            } else {
 
                 tempoVisto -= Time.deltaTime;
-                if (tempoVisto <= 0) {
-                    alerta = false;
-                }
             }
         }
+    }
+    
+    private void ControleAtencao() {
 
-        /* Controle do quão atento o guarda está ao buscar o alvo
-         * 
-         * - Se o guarda não sabe da presença do alvo, a luz fica normal e o guarda fica sem atenção
+        /* - Se o guarda não sabe da presença do alvo, a luz fica normal e o guarda fica sem atenção
          * - Se o guarda percebeu algo, a luz começa a mudar de cor e o guarda fica atento
          * - Se o guarda viu o alvo:
          *     - a luz fica vermelha
@@ -130,19 +148,21 @@ public class TestGuard : MonoBehaviour {
 
             luz.color = corLuzIni;
             atencao = false;
+            alerta = false;
         } else if (tempoVisto > 0 && tempoVisto < tempoPerceber) {
 
             tempoVisto = Mathf.Clamp(tempoVisto, 0, tempoPerceber);
             luz.color = Color.Lerp(corLuzIni, Color.yellow, tempoVisto / tempoPerceber);
             atencao = true;
         } else if (tempoVisto >= tempoPerceber) {
+            atencao = true;
             alerta = true;
             perigo = true;
             luz.color = Color.red;
             guardaViuJogador?.Invoke();
         }
     }
-    
+
     // Busca o jogador
     private bool VerJogador() {
 
@@ -172,30 +192,60 @@ public class TestGuard : MonoBehaviour {
         // Coloca o guarda no primeiro trecho
         transform.position = trechos[0];
 
-        /* int indexTrechoAlvo: Declaração de qual trecho o guarda está indo
-         * Vector3 trechoAlvo:  Vetor que diz a posição do trecho que o guarda deve ir agora
+        /* int indexTrechoAlvo   : Declaração de qual trecho o guarda está indo
+         * Vector3 trechoAlvo    : Declaração do vetor que diz a posição do trecho que o guarda deve ir agora
+         * Vector3 ultimoAvistado: Declaração da posição da ultima vez que o guarda viu o jogador
          */
         int indexTrechoAlvo = 1;
         Vector3 trechoAlvo = trechos[indexTrechoAlvo];
-
+        Vector3 ultimoAvistado = alvo.position;
 
         while (true) {
-            // Faz o movimento
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(trechoAlvo.x, transform.position.y, trechoAlvo.z), vel * Time.deltaTime);
-            transform.LookAt(new Vector3 (trechoAlvo.x, transform.position.y, trechoAlvo.z));
+            // se não está alerta, segue caminho normal, caso contrário segue o alvo
+            if (atencao == false) {
+                // Faz o movimento
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(trechoAlvo.x, transform.position.y, trechoAlvo.z), vel * Time.deltaTime);
+                transform.LookAt(new Vector3(trechoAlvo.x, transform.position.y, trechoAlvo.z));
 
-            // Se o guarda chegou na posição do trecho que ele estava indo
-            if (transform.position.x == trechoAlvo.x && transform.position.z == trechoAlvo.z) {
+                // Se o guarda chegou na posição X e Z do trecho que ele estava indo
+                if (transform.position.x == trechoAlvo.x && transform.position.z == trechoAlvo.z) {
 
-                // Define que agora o trecho alvo é o próximo
-                indexTrechoAlvo = (indexTrechoAlvo + 1) % trechos.Length;
-                trechoAlvo = trechos[indexTrechoAlvo];
-                // Retorna um tempo de espera e uma rotação antes que ele possa seguir para o próximo trecho
-                yield return new WaitForSeconds(tempoEspera);
-                yield return StartCoroutine(VirarParaCaminho(trechoAlvo));
+                    // Define que agora o trecho alvo é o próximo
+                    indexTrechoAlvo = (indexTrechoAlvo + 1) % trechos.Length;
+                    trechoAlvo = trechos[indexTrechoAlvo];
+                    // Retorna um tempo de espera e uma rotação antes que ele possa seguir para o próximo trecho
+                    yield return new WaitForSeconds(tempoEspera);
+                    yield return StartCoroutine(VirarParaCaminho(trechoAlvo));
+
+                }
+            } else if (atencao == true) {
+
+                // Diz que a nova posição que o guarda deve ir é a ultima posição que o alvo foi avistado, ou se o alvo estiver muito próximo
+                if (VerJogador() == true || Vector3.Distance(transform.position, alvo.position) < distAlerta) {
+
+                    ultimoAvistado = alvo.position;
+                    yield return StartCoroutine(VirarParaCaminho(ultimoAvistado));
+                }
+                // Movimento se estiver fora do alcance do ataque, com uma folga
+                if (perigo == true && Vector3.Distance(transform.position, alvo.position) > distDano * 0.9) {
+
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(ultimoAvistado.x, transform.position.y, ultimoAvistado.z), velPersegue * Time.deltaTime);
+                    transform.LookAt(new Vector3(ultimoAvistado.x, transform.position.y, ultimoAvistado.z));
+                
+                // Se estiver no alcance do ataque, ataca
+                } else if (Vector3.Distance(transform.position, alvo.position) < distDano && recargaAtaque <= 0) {
+                    
+                    // Deixa o ataque em recarga
+                    recargaAtaque = cdAtaque;
+
+                    // Reduz o hp do jogador (ficou meio mal implementado mas funciona legal)
+                    alvo.GetComponent<PlayerResources>().hp -= danoGuarda;
+
+                }
 
             }
-            // Evitar reclamações do programa
+
+            // Evita reclamações do programa por que o método sempre precisa de algum retorno
             yield return null;
         }
     }
