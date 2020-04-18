@@ -28,4 +28,14 @@ public class Buttons : MonoBehaviour {
         
         Application.Quit();
     }
+
+    public void BtDevRoom() {
+
+        SceneManager.LoadScene("DevRoom");
+    }
+
+    public void BtTests() {
+
+        SceneManager.LoadScene("Tests");
+    }
 }
