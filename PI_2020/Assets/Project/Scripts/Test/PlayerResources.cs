@@ -6,15 +6,19 @@ using UnityEngine.UI;
 public class PlayerResources : MonoBehaviour {
     
     public Image barraHp;
-    public Image barraStamina;
-    public float maxHp = 100.0f;
-    public float maxStamina = 100.0f;
-    public float velRegenHp = 0.5f;
-    public float velDrenoStamina = 20.0f;
-    public float velRegenStamina = 30.0f;
-    public float velCorrida = 20;
+
     public float hp;
+    public float maxHp = 100.0f;
+    public float velRegenHp = 0.5f;
+
+    public Image barraStamina;
+
     public float stamina;
+    public float maxStamina = 100.0f;
+    public float velRegenStamina = 30.0f;
+    public float velDrenoStamina = 20.0f;
+    
+    public float velCorrida = 20;
 
     private float velAndar;
     public bool correndo = false;
@@ -31,21 +35,14 @@ public class PlayerResources : MonoBehaviour {
     private void Update() {
 
         //Controle de corrida
-        ControleCorrida();
+        //ControleCorrida();
 
         // Regeneração de Hp
-        //RegenRecurso(hp, maxHp, velRegenHp);
-        if (hp < maxHp) {
-
-            hp += velRegenHp * Time.deltaTime;
-        } else if (hp > maxHp) {
-
-            hp = maxHp;
-        }
-
+        hp = RegenRecurso(hp, maxHp, velRegenHp);
+        
         // Controle das barras
         ControleBarra(barraHp, hp, maxHp);
-        ControleBarra(barraStamina, stamina, maxStamina);
+        // ControleBarra(barraStamina, stamina, maxStamina);
     }
 
     // Método que controla a corrida do jogador
@@ -57,14 +54,7 @@ public class PlayerResources : MonoBehaviour {
                 correndo = true;
 
                 // Gasto de estamina
-                //RegenRecurso(stamina, maxStamina, -velDrenoStamina);
-                if (stamina <= maxStamina) {
-
-                    stamina += -velDrenoStamina * Time.deltaTime;
-                } else if (stamina > maxStamina) {
-
-                    stamina = maxStamina;
-                }
+                stamina = RegenRecurso(stamina, maxStamina, -velDrenoStamina);
 
                 // Muda a velocidade do jogador para ele correr
                 GetComponent<JogadorControl>().vel = velCorrida;
@@ -75,20 +65,13 @@ public class PlayerResources : MonoBehaviour {
                 // Muda a velocidade do jogador para ele correr
                 GetComponent<JogadorControl>().vel = velAndar;
             }
-        } else {
+        } else if (!Input.GetKey(KeyCode.LeftShift)) {
 
             correndo = false;
 
             // Regeneração de estamina
-            //RegenRecurso(stamina, maxStamina, velRegenStamina);
-            if (stamina < maxStamina) {
-
-                stamina += velRegenStamina * Time.deltaTime;
-            } else if (stamina > maxStamina) {
-
-                stamina = maxStamina;
-            }
-
+            stamina = RegenRecurso(stamina, maxStamina, velRegenStamina);
+            
             // Muda a velocidade do jogador para ele andar
             GetComponent<JogadorControl>().vel = velAndar;
 
@@ -96,8 +79,7 @@ public class PlayerResources : MonoBehaviour {
     }
 
     // Método que controla regeneração dos recursos
-    /*private void RegenRecurso (float recurso, float maxRecurso, float velRegenRecurso) {
-
+    private float RegenRecurso (float recurso, float maxRecurso, float velRegenRecurso) {
         // Se o recurso não está no máximo, vai enchendo aos poucos dependendo da sua velocidade de regeneração, caso contrário trava no máximo
         if (recurso <= maxRecurso) {
 
@@ -106,7 +88,8 @@ public class PlayerResources : MonoBehaviour {
 
             recurso = maxRecurso;
         }
-    }*/
+        return recurso;
+    }
 
     // Método para controlar o quão cheio as barras da IU estão
     private void ControleBarra (Image barra, float recurso, float maxRecurso) {

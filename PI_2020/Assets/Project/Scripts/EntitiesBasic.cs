@@ -8,11 +8,20 @@ public class EntitiesBasic : MonoBehaviour
     float m_HP;
     public float m_MaxHP = 1;
 
-    public UnityEvent m_DamageEvent;
-    public UnityEvent m_DeathEvent;
-    public UnityEvent m_HealEvent;
-    public UnityEvent m_SpawnEvent;
-    
+
+
+    [System.Serializable]
+    class M_Event
+    {
+        public UnityEvent damage;
+        public UnityEvent death;
+        public UnityEvent heal;
+        public UnityEvent spawn;
+
+    }
+    [SerializeField]
+    M_Event m_events;
+
     protected bool IsAlive()
     {
         if (m_HP <= 0)
@@ -63,22 +72,22 @@ public class EntitiesBasic : MonoBehaviour
 
     void OnDeath()
     {
-        m_DeathEvent.Invoke();
+        m_events.death.Invoke();
         Destroy(this.gameObject, 3f);
     }
 
     void OnDamage()
     {
-        m_DamageEvent.Invoke();
+        m_events.damage.Invoke();
     }
 
     void OnHeal()
     {
-        m_HealEvent.Invoke();
+        m_events.heal.Invoke();
     }
 
     void OnSpawn()
     {
-        m_HealEvent.Invoke();
+        m_events.spawn.Invoke();
     }
 }

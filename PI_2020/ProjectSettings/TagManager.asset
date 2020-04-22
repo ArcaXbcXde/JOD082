@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Enemy
   - Wall
+  - Guard
+  - Back
   layers:
   - Default
   - TransparentFX
@@ -18,9 +20,9 @@ TagManager:
   - 
   - Ground
   - Post-Processing
-  - 
-  - 
-  - 
+  - EntitiesGuard
+  - Game
+  - Wall
   - 
   - 
   - 

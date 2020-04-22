@@ -4,10 +4,70 @@ using UnityEngine;
 
 public class TestGuard : MonoBehaviour {
 
-    /* float vel             : Velocidade do guarda
+    /* ____________________________________________________________________________________________
+     * DESCRIÇÃO
+     * ____________________________________________________________________________________________
+     * O guarda faz a patrulha entre os trechos em uma rota circular, e ao chegar no ultimo trecho ele anda de volta para o primeiro trecho.*¹
+     * 
+     * Com o método <OnDrawGizmos> os pontos que o guarda deve ir aparecem no editor assim como suas ligações.
+     * 
+     * O guarda possui uma visão representada por uma luz, e sua cor indica o que ele está fazendo
+     * 
+     * O guarda possui os "modos":
+     *      normal, onde patrulha normalmente;
+     *          -sua luz estará normal;
+     *          
+     *      atento, quando ele "pensa" ter visto algo;
+     *          -sua luz irá mudando gradativamente do normal até amarelo;
+     *          
+     *      alerta, quando ele viu o alvo;
+     *          -sua luz ficará vermelha;
+     *          
+     *      perigo, quando ele já viu o alvo e já sabe que há algo por aí*²;
+     *          -sua luz dependerá do modo em que se encontra;
+     * 
+     * O guarda ao ver o alvo a uma distância menor que <distVisao>, fica encarando a posição que ele "pensa" que viu o alvo
+     *      - ou por <tempoVisto> tempo até que esse tempo passa de <tempoPerceber>, que é quando o guarda começa a perseguir o alvo
+     *      - ou até que <tempoVisto> volte a 0 e o guarda volta para sua patrulha.
+     * 
+     * Se o alvo ficar numa distância abaixo de <distAlerta> do guarda, o guarda imediatamente fica no modo alerta
+     * 
+     * Quando o guarda começa a perseguir o alvo, enquanto o alvo ficar na vista do guarda, o guarda ficará em estado de alerta e
+     *      <tempoPerceber> ficará travado em <tempoDesistencia>
+     *      
+     * Enquanto o guarda estiver alerta, e o jogador se aproximar a menos de <distAlerta>, mesmo que não esteja em
+     *      seu campo de visão o guarda irá perceber o jogador e <tempoPerceber> irá renovar a duração em <tempoDesistencia> segundos.
+     * 
+     * Se o guarda começa a perseguir o alvo, e o alvo sair de vista, o guarda vai andar até a ultima posição que ele viu o alvo
+     *      e irá esperar lá*³ até <tempoDesistencia> chegar em 0, e então o guarda irá voltar para sua patrulha como se nada tivesse acontecido*² 
+     * 
+     * Se o guarda se aproximar a uma distância menor que <distDano> do alvo, ele ataca causando <danoGuarda> de dano a cada <cdAtaque> segundos.
+     * 
+     * ____________________________________________________________________________________________
+     * ALTERAÇÕES NECESSÁRIAS
+     * ____________________________________________________________________________________________
+     * *¹ -> Talvez seja necessário implementar novos tipos de rotas de patrulha, com a atual é possível apenas fazer
+     *          ele ir numa rota circular ou reta entre dois pontos.
+     * 
+     * *² -> Implementar as mudanças do guarda no estado de perigo após ter ficado no estado de alerta alguma vez, mudando:
+     *          1. aumentar sua velocidade de patrulha;
+     *          2. aumentar campo de visão;
+     *          3. reduzir o tempo até ficar atento, pois algo aconteceu;
+     *          4. ficar continuamente procurando algo, mesmo enquanto patrulha.
+     * 
+     * *³ -> trocar a implementação de "esperar lá" para a de "procurar por lá".
+     * 
+     * !BUG! O guarda fica devagar enquanto persegue o jogador.
+     * !BUG! O guarda acompanha com a visão acompanha através da parede enquanto está em alerta,
+     *          não vendo ele, não renovando as variáveis mas ainda olhando em direção ao jogador.
+     * 
+     * ____________________________________________________________________________________________
+     * VARIÁVEIS
+     * ____________________________________________________________________________________________
+     * float vel             : Velocidade do guarda
      * float velPersegue     : Velocidade de perseguição do guarda
-     * float tempoEspera     : Tempo de espera que o guarda fica em cada ponto
      * float velRotacao      : Velocidade de rotação do guarda
+     * float tempoEspera     : Tempo de espera que o guarda fica em cada ponto
      * float distVisao       : Distância que o guarda enxerga o alvo
      * float distAlerta      : Distância entre o guarda e o alvo que o guarda entra imediatamente em alerta
      * float distDano        : Distância para que a capsula cause dano
@@ -42,8 +102,8 @@ public class TestGuard : MonoBehaviour {
 
     public float vel = 1.0f;
     public float velPersegue = 2.0f;
-    public float tempoEspera = 0.2f;
     public float velRotacao = 90.0f;
+    public float tempoEspera = 0.2f;
     public float distVisao = 15.0f;
     public float distAlerta = 8.0f;
     public float distDano = 2.0f;
@@ -134,6 +194,7 @@ public class TestGuard : MonoBehaviour {
         }
     }
     
+    // Controla o quão atento o 
     private void ControleAtencao() {
 
         /* - Se o guarda não sabe da presença do alvo, a luz fica normal e o guarda fica sem atenção
@@ -178,14 +239,26 @@ public class TestGuard : MonoBehaviour {
         if ((Vector3.Distance (transform.position, alvo.position) < distVisao)
             && (Vector3.Angle(transform.forward, (alvo.position - transform.position).normalized) < anguloVisao / 2.0f)
             && (Physics.Linecast(transform.position, alvo.position, mascaraVisao) == false)) {
-                
+
             return true;
         } else {
             
             return false;
         }
     }
-    
+
+    private bool JogadorVisivel() {
+
+        // Verifica se o jogador está visível
+        if ((Physics.Linecast(transform.position, alvo.position, mascaraVisao) == false)) {
+
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+
     // Método que define que o guarda fará uma ronda circular
     private IEnumerator SeguirCaminhoCircular(Vector3[] trechos) {
 
@@ -219,18 +292,20 @@ public class TestGuard : MonoBehaviour {
 
                 }
             } else if (atencao == true) {
-
+                
                 // Diz que a nova posição que o guarda deve ir é a ultima posição que o alvo foi avistado, ou se o alvo estiver muito próximo
-                if (VerJogador() == true || Vector3.Distance(transform.position, alvo.position) < distAlerta) {
+                if (VerJogador() == true || (Vector3.Distance(transform.position, alvo.position) < distAlerta && (Physics.Linecast(transform.position, alvo.position, mascaraVisao) == false))) {
 
                     ultimoAvistado = alvo.position;
+                    if ((Physics.Linecast(transform.position, alvo.position, mascaraVisao) == false)) {
+
                     yield return StartCoroutine(VirarParaCaminho(ultimoAvistado));
+                    }
                 }
                 // Movimento se estiver fora do alcance do ataque, com uma folga
-                if (perigo == true && Vector3.Distance(transform.position, alvo.position) > distDano * 0.9) {
+                if (alerta == true && Vector3.Distance(transform.position, alvo.position) > distDano * 0.9) {
 
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(ultimoAvistado.x, transform.position.y, ultimoAvistado.z), velPersegue * Time.deltaTime);
-                    transform.LookAt(new Vector3(ultimoAvistado.x, transform.position.y, ultimoAvistado.z));
                 
                 // Se estiver no alcance do ataque, ataca
                 } else if (Vector3.Distance(transform.position, alvo.position) < distDano && recargaAtaque <= 0) {
@@ -253,12 +328,12 @@ public class TestGuard : MonoBehaviour {
     // Método que define que ele irá olhar para a direção que anda
     private IEnumerator VirarParaCaminho (Vector3 girar) {
 
-        //Direção para o trecho alvo do olhar do guarda
+        //Direção para a posição do olhar do guarda
         Vector3 direcaoParaOlhar = (girar - transform.position).normalized;
         float anguloAlvo = 90 - Mathf.Atan2(direcaoParaOlhar.z, direcaoParaOlhar.x) * Mathf.Rad2Deg;
 
         // while para ir girando o guarda frame a frame até alcançar o ângulo desejado com uma pequena brecha para imprecisão do programa
-        while (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.y, anguloAlvo)) > 0.1f && atencao == false) {
+        while (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.y, anguloAlvo)) > 0.1f) {
 
             // Faz o guarda girar
             transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y, anguloAlvo, velRotacao * Time.deltaTime);
@@ -288,6 +363,7 @@ public class TestGuard : MonoBehaviour {
             posAnterior = trecho.position;
 
         }
+
         if (loopCaminho == true) {
             // Desenha uma linha entre o primeiro trecho e o último
             Gizmos.DrawLine(posAnterior, posInicial);
@@ -300,6 +376,12 @@ public class TestGuard : MonoBehaviour {
         Gizmos.DrawRay(transform.position, transform.forward * distAlerta);
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, transform.forward * distDano);
+
+        //Desenha um raio entre o alvo e o garda, se visível
+        if ((Physics.Linecast(transform.position, alvo.position, mascaraVisao) == false)) {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(transform.position, alvo.position);
+        }
     }
 
 }

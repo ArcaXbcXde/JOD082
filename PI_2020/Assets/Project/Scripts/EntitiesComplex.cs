@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EntitiesComplex : EntitiesBasic
 {
-    // i dont what to put here!
+    // i dont nkow what to put here!
 
 
 }
