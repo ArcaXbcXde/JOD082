@@ -122,11 +122,11 @@ public class TestGuard : MonoBehaviour {
     private bool atencao = false;
     private bool alerta = false;
     private bool perigo = false;
-    private Transform alvo;
+    public Transform alvo;
     private Color corLuzIni;
     
     // Start
-    private void Start() {
+    private void Awake() {
         
         // Diz quem é o alvo
         alvo = GameObject.FindGameObjectWithTag("Player").transform;
@@ -149,6 +149,11 @@ public class TestGuard : MonoBehaviour {
 
         // Faz o guarda começar a ronda
         StartCoroutine(SeguirCaminhoCircular(trechos));
+    }
+
+    private void Start() {
+        
+
     }
 
     // Update

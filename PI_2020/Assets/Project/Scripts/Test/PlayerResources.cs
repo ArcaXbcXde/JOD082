@@ -20,7 +20,7 @@ public class PlayerResources : MonoBehaviour {
     
     public float velCorrida = 20;
 
-    private float velAndar;
+    //private float velAndar;
     public bool correndo = false;
 
     private void Awake() {
@@ -28,7 +28,7 @@ public class PlayerResources : MonoBehaviour {
         hp = maxHp;
         stamina = maxStamina;
 
-        velAndar = GetComponent<JogadorControl>().vel;
+        //velAndar = GetComponent<JogadorControl>().vel;
         
     }
 
@@ -63,7 +63,7 @@ public class PlayerResources : MonoBehaviour {
                 correndo = false;
 
                 // Muda a velocidade do jogador para ele correr
-                GetComponent<JogadorControl>().vel = velAndar;
+                //GetComponent<JogadorControl>().vel = velAndar;
             }
         } else if (!Input.GetKey(KeyCode.LeftShift)) {
 
@@ -73,7 +73,7 @@ public class PlayerResources : MonoBehaviour {
             stamina = RegenRecurso(stamina, maxStamina, velRegenStamina);
             
             // Muda a velocidade do jogador para ele andar
-            GetComponent<JogadorControl>().vel = velAndar;
+            //GetComponent<JogadorControl>().vel = velAndar;
 
         }
     }
