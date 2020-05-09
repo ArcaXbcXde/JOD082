@@ -56,9 +56,7 @@ public class EntitiesPlayer : EntitiesComplex {
                 gameObject.GetComponent<PlayerMovement>().canMove = false;
                 m_anim.SetTrigger("isAssasinating");
                 m_dagger.DOPunchRotation(new Vector3(360, 0, 0), _assasinationTime);
-
-                m_assasinationTarget.GetComponent<TestGuard>().enabled = false;
-
+                
                 blood.gameObject.SetActive(true);
                 blood.transform.position = m_assasinationTarget.transform.position;
 
