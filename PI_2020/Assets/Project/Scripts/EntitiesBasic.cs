@@ -5,11 +5,9 @@ using UnityEngine.Events;
 
 public class EntitiesBasic : MonoBehaviour
 {
-    float m_HP;
+    public float m_HP = 0;
     public float m_MaxHP = 1;
-
-
-
+    
     [System.Serializable]
     class M_Event
     {

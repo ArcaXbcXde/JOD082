@@ -37,8 +37,11 @@ public class MovementController : EntitiesComplex
     // Update
     private void Update()
     {
-
-        Move();
+        if (Input.GetKeyDown(KeyCode.W) && Input.GetKeyDown(KeyCode.A) && Input.GetKeyDown(KeyCode.S) && Input.GetKeyDown(KeyCode.D))
+        {
+            Move();
+        }
+        
         Jump(KeyCode.Space);
         m_animator.SetBool("IsGround", isGround);
 
