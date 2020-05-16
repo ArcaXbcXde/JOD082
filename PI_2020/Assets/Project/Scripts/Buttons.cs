@@ -5,23 +5,49 @@ using UnityEngine.SceneManagement;
 
 public class Buttons : MonoBehaviour {
 
-    //Ao ser chamado vai pra o menu inicial
+    //Ao ser chamado vai para
     public void BtMenu() {
 
         SceneManager.LoadScene("StartScene");
     }
 
-    //Ao ser chamado vai pra a DevRoom (alterar depois)
+    //Ao ser chamado vai para 
     public void BtContinue () {
         
         SceneManager.LoadScene("DevRoom");
     }
 
-    //Ao ser chamado vai pra o menu de opções
+    // Ao ser chamado vai para
+    public void BtNewGame() {
+
+        SceneManager.LoadScene("LevelSelection");
+    }
+
+    //Ao ser chamado vai para 
+    public void BtLoadGame() {
+
+        SceneManager.LoadScene("DevRoom");
+    }
+
+
+    //Ao ser chamado vai para
     public void BtOptions() {
 
         SceneManager.LoadScene("OptionsScene");
     }
+
+    //Ao ser chamado vai para
+    public void BtDevRoom() {
+
+        SceneManager.LoadScene("DevRoom");
+    }
+
+    //Ao ser chamado vai para
+    public void BtTests() {
+
+        SceneManager.LoadScene("Tests");
+    }
+
 
     //Ao ser chamado fecha a aplicação
     public void BtQuit () {

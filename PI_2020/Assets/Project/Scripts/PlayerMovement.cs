@@ -187,7 +187,8 @@ public class PlayerMovement: MonoBehaviour {
         }
     }
 
-    private void Rotation() {
+    private void Rotation() 
+    {
         
         transform.GetChild(0).rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MoveVector()), m_rotationSpeed);
     }

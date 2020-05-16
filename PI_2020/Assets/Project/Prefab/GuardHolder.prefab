@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2764311470132671006}
   - component: {fileID: 6181446926150870569}
   - component: {fileID: 6181446926150870575}
-  - component: {fileID: 8851899492894175592}
   m_Layer: 10
   m_Name: GuardTest
   m_TagString: Guard
@@ -126,33 +125,11 @@ MonoBehaviour:
   cdAtaque: 2
   danoGuarda: 20
   loopCaminho: 1
+  meuCaminho: {fileID: 6181446927342793329}
   luz: {fileID: 6181446926504234695}
   mascaraVisao:
     serializedVersion: 2
     m_Bits: 4096
-  meuCaminho: {fileID: 6181446927342793329}
---- !u!195 &8851899492894175592
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6181446926150870570}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.36
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &6181446926504234689
 GameObject:
   m_ObjectHideFlags: 0
