@@ -25,15 +25,30 @@ public class IA_UI : MonoBehaviour
         }
         if (m_entitieGuard.m_AlertLevel >= 25 && m_entitieGuard.m_AlertLevel < 50)
         {
-            m_alertBar.color = new Color(255, 255, 0);
+            m_alertBar.color = Color.yellow;
         }
-        if (m_entitieGuard.m_AlertLevel >= 50 && m_entitieGuard.m_AlertLevel < 75)
-        {
-            m_alertBar.color = new Color(255, 100, 0);
-        }
-        if (m_entitieGuard.m_AlertLevel >= 75 && m_entitieGuard.m_AlertLevel < 100)
+        if (m_entitieGuard.m_AlertLevel >= 50)
         {
             m_alertBar.color = Color.red;
+        }
+
+
+        switch (m_entitieGuard.enumIAStates)
+        {
+            case EntitieGuard.IAStates.Patrol:
+                m_stateText.text = "Patrol";
+                break;
+            case EntitieGuard.IAStates.Alert:
+                m_stateText.text = "Alert";
+                break;
+            case EntitieGuard.IAStates.Search:
+                m_stateText.text = "Search";
+                break;
+            case EntitieGuard.IAStates.kill:
+                m_stateText.text = "Patrol";
+                break;
+            default:
+                break;
         }
     }
 }

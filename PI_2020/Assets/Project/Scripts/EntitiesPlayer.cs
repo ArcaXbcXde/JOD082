@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class EntitiesPlayer : EntitiesComplex {
+public class EntitiesPlayer : EntitiesComplex 
+{
 
     public GameObject blood;
 
-    public GameObject m_assasinationTarget;
+    
     public string m_backTag = "Back";
     public LayerMask m_enemyLayer;
     [Space]
-    public RadiusOfAssasination m_RadiusOfAssasination;
-    public Transform m_raycastPoint;
+    //obsoleto   
+    //public RadiusOfAssasination m_RadiusOfAssasination;
+    //public Transform m_raycastPoint;  
     [Space]
-
     Animator m_anim;
-    public Transform m_dagger;
+    //public Transform m_dagger;
     bool canAssasinate = false;
+    [Space]
+    public GameObject m_assasinationTarget;
+    public GameObject headUpsTest;
 
     // Awake
     protected override void Awake()
@@ -29,29 +33,45 @@ public class EntitiesPlayer : EntitiesComplex {
     // Update
     private void Update()
     {
-        StartCoroutine(MeleeAttack(2.5f));
-
-        CheckDistanceToAssasinate(1.5f);
-
-        if (m_assasinationTarget == null) {
-
-            gameObject.GetComponent<PlayerMovement>().canMove = true;
-        }
-
-        if (blood.GetComponent<ParticleSystem>().time >= 1) {
-
-            blood.gameObject.SetActive(false);
-        }
+        Assasination();
     }
 
     #region Attack
 
+    public void Assasination()
+    {
+        if (canAssasinate)
+        {
+            headUpsTest.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                m_anim.SetTrigger("Assasination");
+                m_assasinationTarget.GetComponent<Animator>().SetTrigger("Death_Assassination");
+            }
+        }
+        if (!canAssasinate)
+        {
+            headUpsTest.SetActive(false);
+        }
+        if (m_assasinationTarget == null)
+        {
+            headUpsTest.SetActive(false);
+        }
+        
+        
+    }
+
     // kill guard by melee
-    IEnumerator MeleeAttack(float _assasinationTime) {
+    //obsoleto
+    /*IEnumerator MeleeAttack(float _assasinationTime) 
+    {
 
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0)) 
+        {
 
-            if (canAssasinate) {
+            if (canAssasinate) 
+            {
 
                 gameObject.GetComponent<PlayerMovement>().canMove = false;
                 m_anim.SetTrigger("isAssasinating");
@@ -67,19 +87,18 @@ public class EntitiesPlayer : EntitiesComplex {
                 gameObject.GetComponent<PlayerMovement>().canMove = true;
             }
         }
+    }*/
+
+    // To Do: kill guard on distance
+    void RangeAttack() 
+    {
+
     }
-
-    // ToDo: kill guard on distance
-    void RangeAttack() {
-
-    }
-
-
     #endregion
 
 
-
-    void CheckDistanceToAssasinate(float _distance)
+    //obsoleto
+    /*void CheckDistanceToAssasinate(float _distance)
     {
         if (m_RadiusOfAssasination.objectsList.Count > 0)
         {
@@ -118,10 +137,35 @@ public class EntitiesPlayer : EntitiesComplex {
             }
             
         }
-    }
+    }*/
 
     #region Colliders
-
+    private void OnTriggerEnter(Collider other)
+    {
+        Transform _obj;
+        if (other.CompareTag("Back"))
+        {
+            canAssasinate = true;
+            _obj = other.transform.parent;
+            m_assasinationTarget = _obj.gameObject;
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Back"))
+        {
+            canAssasinate = true;
+            headUpsTest.transform.position = other.transform.position + (transform.up * 2.5f);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Back"))
+        {
+            canAssasinate = false;
+            m_assasinationTarget = null;
+        }
+    }
 
     #endregion
 }

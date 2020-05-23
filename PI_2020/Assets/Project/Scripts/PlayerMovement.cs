@@ -9,7 +9,8 @@ using UnityEngine.UI;
 
 
 
-public class PlayerMovement: MonoBehaviour {
+public class PlayerMovement: MonoBehaviour 
+{
 
 
     public enum MoveStatus { Run,Walk,Crouch }
@@ -83,7 +84,8 @@ public class PlayerMovement: MonoBehaviour {
 
     #endregion
 
-    void Awake() {
+    void Awake() 
+    {
 
         m_Speed.run = m_Speed.run / 1000;
         m_Speed.walk = m_Speed.walk / 1000;
@@ -95,9 +97,11 @@ public class PlayerMovement: MonoBehaviour {
         m_animator = gameObject.GetComponent<Animator>();
     }
 
-    private void Update() {
+    private void Update() 
+    {
 
-        if (canMove) {
+        if (canMove) 
+        {
             Move();
             jump();
             Rotation();
@@ -105,11 +109,13 @@ public class PlayerMovement: MonoBehaviour {
         
         AnimParameters();
 
-        if (IsGround()) {
+        if (IsGround()) 
+        {
             isGround = true;
         }
 
-        if (!IsGround()) {
+        if (!IsGround()) 
+        {
 
             isGround = false;
         }
