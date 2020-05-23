@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EntitieGuard : MonoBehaviour
+//esse script contei as variaveis usada no animator behevior e algumas funçoes "globais" para essa classe 
+public class EntitieGuard : EntitiesBasic
 {
     public enum IAStates { Patrol, Alert, Search, kill }
     public IAStates enumIAStates = IAStates.Patrol;
@@ -14,6 +15,7 @@ public class EntitieGuard : MonoBehaviour
     public float m_maxAlertLevel = 100;
     public float m_AlertMult = 2;
     float time = 0;
+
     #region class
     [System.Serializable]
     public class Patrol
@@ -23,14 +25,12 @@ public class EntitieGuard : MonoBehaviour
     }
     [SerializeField]
     public Patrol m_patrol;
-
     [System.Serializable]
     public class Vision
     {
         public float viewAngle = 90;
         public float viewDistance = 5;
         public bool PlayerInSigth;
-        public Vector3 lastPlayerInSigth;
         public Detection detection;
     }
     [SerializeField]
@@ -38,6 +38,7 @@ public class EntitieGuard : MonoBehaviour
     #endregion
 
     public NavMeshAgent m_navMeshAgent;
+    public Animator m_anim;
 
 
 
@@ -47,8 +48,9 @@ public class EntitieGuard : MonoBehaviour
         #region DetectionVision
         m_vision.detection = transform.GetChild(2).GetComponent<Detection>();
         #endregion
+        m_anim = GetComponent<Animator>();
         m_navMeshAgent = GetComponent<NavMeshAgent>();
-        m_navMeshAgent.autoBraking = false;
+        m_navMeshAgent.autoBraking = true;
     }
 
     // Update is called once per frame
@@ -57,46 +59,52 @@ public class EntitieGuard : MonoBehaviour
         AlertLevel();
     }
 
+    //almentar o nivel de alerta quando o player estar na area de dectecção do quarda
     void AlertLevel()
     {
         if (m_vision.detection.playerInSight)
         {
             m_AlertLevel += Time.deltaTime * m_AlertMult;
             m_AlertLevel = Mathf.Clamp(m_AlertLevel, 0, 100);
+            
         }
         if (!m_vision.detection.playerInSight)
         {
             m_AlertLevel -= Time.deltaTime * m_AlertMult;
             m_AlertLevel = Mathf.Clamp(m_AlertLevel, 0, 100);
         }
+        m_anim.SetFloat("AlertLevel", m_AlertLevel);
     }
 
     #region patrol
 
-    public void GoToPath()
-    {
-        m_navMeshAgent.destination = m_patrol.pathTransform[m_patrol.pathIdex].position;
+    //public void GoToPath()
+    //{
+    //    if (m_patrol.pathTransform.Length > 0)
+    //    {
+    //        m_navMeshAgent.destination = m_patrol.pathTransform[m_patrol.pathIdex].position;
+    //    }
+        
+    //}
+    //public void SetPathIndex()
+    //{
+    //    if (m_patrol.pathTransform.Length == 0)
+    //    {
+    //        return;
+    //    }
 
-    }
-    public void SetPathIndex()
-    {
-        if (m_patrol.pathTransform.Length == 0)
-        {
-            return;
-        }
+    //    if (m_patrol.pathIdex != m_patrol.pathTransform.Length)
+    //    {
+    //        m_patrol.pathIdex++;
+    //        return;
 
-        if (m_patrol.pathIdex != m_patrol.pathTransform.Length)
-        {
-            m_patrol.pathIdex++;
-            return;
+    //    }
+    //    else if (m_patrol.pathIdex == m_patrol.pathTransform.Length)
+    //    {
+    //        m_patrol.pathIdex = 0;
 
-        }
-        else if (m_patrol.pathIdex == m_patrol.pathTransform.Length)
-        {
-            m_patrol.pathIdex = 0;
-
-        }
-    }
+    //    }
+    //}
 
     #endregion
 
@@ -105,8 +113,11 @@ public class EntitieGuard : MonoBehaviour
     {
 
         GizmoDetection();
+        if (m_patrol.pathTransform.Length > 0)
+        {
+            GizmoPath();
+        }
         
-        GizmoPath();
     }
 
     void GizmoDetection()
@@ -122,9 +133,10 @@ public class EntitieGuard : MonoBehaviour
         Gizmos.color = Color.yellow;
         //Gizmos.DrawRay(transform.position , transform.forward * 5);
         //Gizmos.color = Color.cyan;
-        Gizmos.DrawRay(transform.position + transform.up , leftRayDirection * _distance);
+        Gizmos.DrawRay(m_vision.detection.transform.position, leftRayDirection * _distance);
         //Gizmos.color = Color.cyan;
-        Gizmos.DrawRay(transform.position + transform.up, rightRayDirection * _distance);
+        Gizmos.DrawRay(m_vision.detection.transform.position, rightRayDirection * _distance);
+        Gizmos.DrawWireSphere(m_vision.detection.transform.position, _distance);
     }
     void GizmoPath()
     {

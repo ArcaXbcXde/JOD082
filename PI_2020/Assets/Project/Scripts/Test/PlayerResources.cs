@@ -100,6 +100,10 @@ public class PlayerResources : MonoBehaviour {
             recurso = 0;
         }
         // Enche a barra de acordo com o quão cheio o recurso está
-        barra.fillAmount = (recurso / maxRecurso);
+        if (barra != null)
+        {
+            barra.fillAmount = (recurso / maxRecurso);
+        }
+        
     }
 }

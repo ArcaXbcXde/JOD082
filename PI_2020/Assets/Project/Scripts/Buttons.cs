@@ -14,7 +14,7 @@ public class Buttons : MonoBehaviour {
     //Ao ser chamado vai para 
     public void BtContinue () {
         
-        SceneManager.LoadScene("DevRoom");
+        SceneManager.LoadScene("LevelSelection");
     }
 
     // Ao ser chamado vai para
@@ -26,7 +26,7 @@ public class Buttons : MonoBehaviour {
     //Ao ser chamado vai para 
     public void BtLoadGame() {
 
-        SceneManager.LoadScene("DevRoom");
+        SceneManager.LoadScene("LevelSelection");
     }
 
 
@@ -40,6 +40,11 @@ public class Buttons : MonoBehaviour {
     public void BtDevRoom() {
 
         SceneManager.LoadScene("DevRoom");
+    }
+
+    public void BtDevRoomGonzaga() {
+
+        SceneManager.LoadScene("DevRoom_G");
     }
 
     //Ao ser chamado vai para

@@ -55,11 +55,12 @@ public class EntitiesBasic : MonoBehaviour
 
     public virtual void TakeDamage(float _takeDamage)
     {
-        m_HP =-_takeDamage;
 
         if (IsAlive())
         {
+            m_HP = m_HP - _takeDamage;
             OnDamage();
+            
         }
         if (!IsAlive())
         {
