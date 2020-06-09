@@ -66,7 +66,7 @@ namespace DG.Tweening
         #endregion
 
 #if UNITY_EDITOR
-        // Fires OnApplicationPause in DOTweenComponent even when Editor is paused (otherwise it's only fired at runtime)
+        // Fires OnApplicationPause in DOTweenComponent even when Editor is inventory (otherwise it's only fired at runtime)
 #if UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5 || UNITY_2017_1
         static void PlaymodeStateChanged()
         #else

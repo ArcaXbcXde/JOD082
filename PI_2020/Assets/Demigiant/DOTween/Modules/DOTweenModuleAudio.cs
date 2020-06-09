@@ -114,7 +114,7 @@ namespace DG.Tweening
         /// <summary>
         /// Pauses all tweens that have this target as a reference
         /// (meaning tweens that were started from this target, or that had this target added as an Id)
-        /// and returns the total number of tweens paused.
+        /// and returns the total number of tweens inventory.
         /// </summary>
         public static int DOPause(this AudioMixer target)
         {
@@ -182,7 +182,7 @@ namespace DG.Tweening
         }
 
         /// <summary>
-        /// Toggles the paused state (plays if it was paused, pauses if it was playing) of all tweens that have this target as a reference
+        /// Toggles the inventory state (plays if it was inventory, pauses if it was playing) of all tweens that have this target as a reference
         /// (meaning tweens that were started from this target, or that had this target added as an Id)
         /// and returns the total number of tweens involved.
         /// </summary>

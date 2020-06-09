@@ -262,10 +262,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5808431175899802773}
   - component: {fileID: 592980143}
-  - component: {fileID: 592980141}
   - component: {fileID: 592980142}
   - component: {fileID: 587460690762428696}
   - component: {fileID: 2413478399890594156}
+  - component: {fileID: 592980141}
   m_Layer: 0
   m_Name: EntitieGuard[PH]
   m_TagString: Untagged
@@ -311,47 +311,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &592980141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7048755036313346325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aa70f686681e9149ad8eb31216b858e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HP: 0
-  m_MaxHP: 1
-  m_events:
-    damage:
-      m_PersistentCalls:
-        m_Calls: []
-    death:
-      m_PersistentCalls:
-        m_Calls: []
-    heal:
-      m_PersistentCalls:
-        m_Calls: []
-    spawn:
-      m_PersistentCalls:
-        m_Calls: []
-  enumIAStates: 0
-  m_AlertLevel: 0
-  m_maxAlertLevel: 100
-  m_AlertMult: 6
-  m_patrol:
-    pathTransform: []
-    pathIdex: -1
-  m_vision:
-    viewAngle: 100
-    viewDistance: 5
-    PlayerInSigth: 0
-    detection: {fileID: 416023471}
-  m_navMeshAgent: {fileID: 0}
-  m_anim: {fileID: 0}
 --- !u!195 &592980142
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -404,6 +363,47 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &592980141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7048755036313346325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aa70f686681e9149ad8eb31216b858e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HP: 0
+  m_MaxHP: 1
+  m_events:
+    damage:
+      m_PersistentCalls:
+        m_Calls: []
+    death:
+      m_PersistentCalls:
+        m_Calls: []
+    heal:
+      m_PersistentCalls:
+        m_Calls: []
+    spawn:
+      m_PersistentCalls:
+        m_Calls: []
+  enumIAStates: 0
+  m_AlertLevel: 0
+  m_maxAlertLevel: 100
+  m_AlertMult: 6
+  m_patrol:
+    pathTransform: []
+    pathIdex: -1
+  m_vision:
+    viewAngle: 100
+    viewDistance: 5
+    PlayerInSigth: 0
+    detection: {fileID: 416023471}
+  m_navMeshAgent: {fileID: 0}
+  m_anim: {fileID: 0}
 --- !u!114 &7119347118126393223
 MonoBehaviour:
   m_ObjectHideFlags: 0

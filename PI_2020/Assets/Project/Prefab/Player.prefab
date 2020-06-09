@@ -1187,7 +1187,6 @@ GameObject:
   - component: {fileID: 9214821819228610849}
   - component: {fileID: 6580949694191793037}
   - component: {fileID: 1874819674}
-  - component: {fileID: 1874819679}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1318,35 +1317,12 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   blood: {fileID: 0}
-  m_assasinationTarget: {fileID: 0}
   m_backTag: Back
   m_enemyLayer:
     serializedVersion: 2
     m_Bits: 1024
+  m_assasinationTarget: {fileID: 0}
   headUpsTest: {fileID: 0}
---- !u!114 &1874819679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8602216418559754405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d095779e84f7fc48b44d102eb170faf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  barraHp: {fileID: 0}
-  hp: 0
-  maxHp: 100
-  velRegenHp: 0.5
-  barraStamina: {fileID: 0}
-  stamina: 0
-  maxStamina: 100
-  velRegenStamina: 30
-  velDrenoStamina: 20
-  velCorrida: 20
-  correndo: 0
 --- !u!1001 &3863402372274197705
 PrefabInstance:
   m_ObjectHideFlags: 0
