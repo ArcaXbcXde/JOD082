@@ -11887,7 +11887,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 393943744}
-  m_LocalRotation: {x: 0.3131743, y: -0.000000032681655, z: 0.000000010777193, w: 0.9496957}
+  m_LocalRotation: {x: 0.3131743, y: 0.000000032681655, z: -0.000000010777193, w: 0.9496957}
   m_LocalPosition: {x: -18.36, y: 4.48, z: -10.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -20595,12 +20595,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -32965,7 +32965,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 640}
+  m_SizeDelta: {x: 300, y: 1080}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2077128193
 MonoBehaviour:
@@ -33400,17 +33400,17 @@ PrefabInstance:
     - target: {fileID: 4095379010670504965, guid: 6e9466636d58fd245a9892bcff42ab19,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021641338
+      value: 0.000000011040317
       objectReference: {fileID: 0}
     - target: {fileID: 4095379010670504965, guid: 6e9466636d58fd245a9892bcff42ab19,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000021462313
+      value: 0.00000001068512
       objectReference: {fileID: 0}
     - target: {fileID: 4095379011931937239, guid: 6e9466636d58fd245a9892bcff42ab19,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 2.5104488e-10
+      value: 2.5104482e-10
       objectReference: {fileID: 0}
     - target: {fileID: 4095379012163372243, guid: 6e9466636d58fd245a9892bcff42ab19,
         type: 3}
