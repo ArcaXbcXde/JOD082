@@ -6,8 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 //esse script contei as variaveis usada no animator behevior e algumas funçoes "globais" para essa classe 
-public class EntitieGuard : EntitiesBasic
-{
+public class EntitieGuard : EntitiesBasic {
     public enum IAStates { Patrol, Alert, Search, kill }
     public IAStates enumIAStates = IAStates.Patrol;
 
