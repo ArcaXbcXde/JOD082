@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pause : MonoBehaviour {
+
 	private bool inventory = false;
 	private bool pause = false;
+
 	private GameObject player;
 	public GameObject pauseScreen;
 	public GameObject camera3D;
@@ -95,13 +97,13 @@ public class Pause : MonoBehaviour {
 		if (pause == false) {
 
 			LockPointer();
-			player.GetComponent<PlayerMovement>().enabled = true;
+			player.GetComponent<JogadorControl>().enabled = true;
 			Time.timeScale = 1;
 			pauseScreen.SetActive(false);
 		} else {
 
 			UnlockPointer();
-			player.GetComponent<PlayerMovement>().enabled = false;
+			player.GetComponent<JogadorControl>().enabled = false;
 			Time.timeScale = 0;
 			pauseScreen.SetActive(true);
 		}

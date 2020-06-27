@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class JogadorControl : MonoBehaviour {
 
@@ -63,6 +64,9 @@ public class JogadorControl : MonoBehaviour {
 	
 	// Update
 	private void Update () {
+
+		// Caso o jogador morra
+		//Morrer();
 
 		// Caso vá assassinar
 		Assassinar();
@@ -162,11 +166,11 @@ public class JogadorControl : MonoBehaviour {
 			if (Input.GetKeyDown(KeyCode.E)) {
 
 				dicaParaAssassinar.SetActive(false);
-				Debug.Log("assassinou " + alvoAtual.name);
-				Destroy(alvoAtual);
+				alvoAtual.SetActive(false);
 				anima.SetTrigger("assassination");
-				assassinando = true;
 				Invoke("TerminouAssassinato", 1.2f);
+				assassinando = true;
+				assassinavel = false;
 			}
 		} else {
 
@@ -178,5 +182,19 @@ public class JogadorControl : MonoBehaviour {
 	private void TerminouAssassinato () {
 
 		assassinando = false;
+	}
+
+	private void Morrer () {
+
+		if (hp <= 0) {
+
+			Invoke("Sumir", 2);
+		}
+	}
+
+	private void Sumir () {
+
+		gameObject.SetActive(false);
+		SceneManager.LoadScene("DefeatScene");
 	}
 }

@@ -8,7 +8,7 @@ public class SceneManagement : MonoBehaviour {
     //Ao ser chamado vai para
     public void BtMenu() {
 
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene("StartMenu");
     }
 
     //Ao ser chamado vai para 

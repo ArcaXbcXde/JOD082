@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 //esse script contei as variaveis usada no animator behevior e algumas funçoes "globais" para essa classe 
 public class EntitieGuard : EntitiesBasic {
@@ -157,5 +158,5 @@ public class EntitieGuard : EntitiesBasic {
 
         }
     }
-    #endregion
+	#endregion
 }

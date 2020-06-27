@@ -14,9 +14,7 @@ public class AssassinationTrigger : MonoBehaviour {
 	private void OnTriggerEnter (Collider other) {
 
 		if (other.gameObject.name == "BackStabArea") {
-
-			Debug.Log ("got: " + other);
-			Debug.Log("parent: " + other.transform.parent.gameObject);
+			
 			controls.assassinavel = true;
 			controls.alvoAtual = other.transform.parent.gameObject;
 		}
