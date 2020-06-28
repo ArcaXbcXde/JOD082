@@ -74,7 +74,7 @@ public class Pause : MonoBehaviour {
 		if (inventory == false) {
 
 			LockPointer();
-			player.GetComponent<PlayerMovement>().enabled = true;
+			player.GetComponent<JogadorControl>().enabled = true;
 			camera3D.gameObject.SetActive(true);
 			canvasInventory.gameObject.SetActive(false);
 			cameraInventory.gameObject.SetActive(false);
@@ -83,7 +83,7 @@ public class Pause : MonoBehaviour {
 		} else {
 
 			UnlockPointer();
-			player.GetComponent<PlayerMovement>().enabled = false;
+			player.GetComponent<JogadorControl>().enabled = false;
 			camera3D.gameObject.SetActive(false);
 			canvasInventory.gameObject.SetActive(true);
 			cameraInventory.gameObject.SetActive(true);
