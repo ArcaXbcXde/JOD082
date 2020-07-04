@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 393943748}
-  - component: {fileID: 393943746}
   - component: {fileID: 393943749}
   - component: {fileID: 393943747}
   - component: {fileID: 393943745}
@@ -35,14 +34,6 @@ Transform:
   m_Father: {fileID: 1441423824534813924}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &393943746
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 393943744}
-  m_Enabled: 1
 --- !u!114 &393943749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,11 +257,24 @@ MonoBehaviour:
   multiplicadorAndar: 0.2
   forcaPulo: 300
   hpMax: 0
-  hp: 0
+  hpCurrent: 10
   cameraJogador: {fileID: 393943748}
   gatilhoAssassinato: {fileID: 7951973317959187313}
   dicaParaAssassinar: {fileID: 1286772902}
   alvoAtual: {fileID: 0}
+--- !u!114 &3980373270016896311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2475764337423699703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a17a89c2c5338b4f9cdf04f571e0bee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpBar: {fileID: 0}
 --- !u!1 &4095379012163372243
 GameObject:
   m_ObjectHideFlags: 0
